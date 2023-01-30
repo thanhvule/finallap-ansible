@@ -1,120 +1,284 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-	<title>Cisco vManage API Documentation</title>
-	<link href='css/typography.css' media='screen' rel='stylesheet' type='text/css' />
-	<link href='css/reset.css' media='screen, print' rel='stylesheet' type='text/css' />
-	<link href='css/screen.css' media='screen, print' rel='stylesheet' type='text/css' />
-	<script type="text/javascript" src="lib/shred.bundle.js"></script>
-	<script src='lib/jquery-1.8.0.min.js' type='text/javascript'></script>
-	<script src='lib/jquery.slideto.min.js' type='text/javascript'></script>
-	<script src='lib/jquery.wiggle.min.js' type='text/javascript'></script>
-	<script src='lib/jquery.ba-bbq.min.js' type='text/javascript'></script>
-	<script src='lib/handlebars-2.0.0.js' type='text/javascript'></script>
-	<script src='lib/underscore-min.js' type='text/javascript'></script>
-	<script src='lib/backbone-min.js' type='text/javascript'></script>
-	<script src='lib/swagger-client.js' type='text/javascript'></script>
-	<script src='swagger-ui.js' type='text/javascript'></script>
-	<script src='lib/highlight.7.3.pack.js' type='text/javascript'></script>
-	<script src='lib/marked.js' type='text/javascript'></script>
-
-	<!-- enabling this will enable oauth2 implicit scope support -->
-	<script src='lib/swagger-oauth.js' type='text/javascript'></script>
-	<script type="text/javascript">
-		$(function () {
-      
-      url = "/dataservice/api-docs/";
-
-      window.swaggerUi = new SwaggerUi({
-        url: url,
-        dom_id: "swagger-ui-container",
-        supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
-        onComplete: function(swaggerApi, swaggerUi){
-
-          function getCsrfToken() {
-            var tokenEndpoint = '/dataservice/client/token';
-            return fetch(window.location.origin + tokenEndpoint, {
-              method: "GET",
-              credentials: "include"
-            }).then(function(response) {
-              return response.text()
-            });
-          }
-
-          function setCsrfHeader(csrfToken) {
-            var csrfTokenHeader = new ApiKeyAuthorization("X-XSRF-TOKEN", csrfToken, "header");
-            window.authorizations.add("csrfToken", csrfTokenHeader);
-          }
-
-          getCsrfToken().then(function(csrfToken) {
-              setCsrfHeader(csrfToken);
-            })
-            .catch(function(error) {
-              console.error('Failed to retrieve CSRF token: ' + error);
-            });
-
-          if(typeof initOAuth == "function") {
-            /*
-            initOAuth({
-              clientId: "your-client-id",
-              realm: "your-realms",
-              appName: "your-app-name"
-            });
-            */
-          }
-          $('pre code').each(function(i, e) {
-            hljs.highlightBlock(e)
-          });
+{
+    "header": {
+        "generatedOn": 1675079980987,
+        "viewKeys": {
+            "uniqueKey": [
+                "system-ip"
+            ],
+            "preferenceKey": "grid-Device"
         },
-        onFailure: function(data) {
-          log("Unable to Load SwaggerUI");
-        },
-        docExpansion: "none",
-        sorter : "alpha"
-      });
-
-      function addApiKeyAuthorization() {
-        var key = $('#input_apiKey')[0].value;
-        log("key: " + key);
-        if(key && key.trim() != "") {
-            log("added key " + key);
-            window.authorizations.add("api_key", new ApiKeyAuthorization("api_key", key, "query"));
+        "columns": [
+            {
+                "title": "Hostname",
+                "property": "host-name",
+                "display": "iconAndText",
+                "iconProperty": "device-type",
+                "hideable": false,
+                "icon": [
+                    {
+                        "key": "vmanage",
+                        "value": "images/vmanage_table.png"
+                    },
+                    {
+                        "key": "vedge",
+                        "value": "images/vedge_table.png"
+                    },
+                    {
+                        "key": "vedge-vbond",
+                        "value": "images/vedge-vbond_table.png"
+                    },
+                    {
+                        "key": "vsmart",
+                        "value": "images/vsmart_table.png"
+                    },
+                    {
+                        "key": "vbond",
+                        "value": "images/vbond_table.png"
+                    }
+                ],
+                "width": 150,
+                "dataType": "string"
+            },
+            {
+                "title": "State",
+                "property": "state",
+                "display": "iconAndToolTip",
+                "iconProperty": "state",
+                "toolTipProperty": "state_description",
+                "defaultPropertyKey": "reachability",
+                "defaultPropertyValue": "reachable",
+                "icon": [
+                    {
+                        "key": "green",
+                        "value": "images/device_state_green.png"
+                    },
+                    {
+                        "key": "red",
+                        "value": "images/device_state_red.png"
+                    },
+                    {
+                        "key": "yellow",
+                        "value": "images/device_state_yellow.png"
+                    },
+                    {
+                        "key": "default",
+                        "value": "images/device_state_other.png"
+                    }
+                ],
+                "width": 20,
+                "dataType": "string"
+            },
+            {
+                "title": "System IP",
+                "property": "system-ip",
+                "hideable": false,
+                "width": 110,
+                "dataType": "ipv4"
+            },
+            {
+                "title": "Reachability",
+                "property": "reachability",
+                "display": "multiColumns",
+                "color": [
+                    {
+                        "key": "reachable",
+                        "value": "616161",
+                        "property": "reachability"
+                    },
+                    {
+                        "key": "unreachable",
+                        "value": "ef5350",
+                        "property": "reachability"
+                    },
+                    {
+                        "key": "auth-failed",
+                        "value": "ffb300",
+                        "property": "reachability"
+                    },
+                    {
+                        "key": "staging",
+                        "value": "ffb300",
+                        "property": "validity"
+                    }
+                ],
+                "width": 150,
+                "minWidth": 150,
+                "dataType": "string"
+            },
+            {
+                "title": "Site ID",
+                "property": "site-id",
+                "width": 70,
+                "dataType": "numberStr"
+            },
+            {
+                "title": "Device Model",
+                "property": "device-model",
+                "display": "multiColumns",
+                "hideable": false,
+                "width": 100,
+                "dataType": "deviceModel"
+            },
+            {
+                "title": "BFD",
+                "property": "bfdSessions",
+                "width": 75,
+                "minWidth": 65,
+                "dataType": "numberStr"
+            },
+            {
+                "title": "Control",
+                "property": "controlConnections",
+                "width": 75,
+                "minWidth": 65,
+                "dataType": "numberStr"
+            },
+            {
+                "title": "Version",
+                "property": "version",
+                "width": 150,
+                "dataType": "string"
+            },
+            {
+                "title": "Up Since",
+                "property": "uptime-date",
+                "displayFormat": "DD MMM YYYY h:mm:ss A z",
+                "inputFormat": "unix-time",
+                "width": 200,
+                "dataType": "date"
+            },
+            {
+                "title": "Chassis Number/ID",
+                "property": "uuid",
+                "hideable": false,
+                "width": 220,
+                "dataType": "string"
+            },
+            {
+                "title": "Device Groups",
+                "property": "device-groups",
+                "width": 100,
+                "dataType": "array"
+            },
+            {
+                "title": "Connected vManage",
+                "property": "connectedVManages",
+                "width": 500,
+                "dataType": "array"
+            }
+        ],
+        "fields": [
+            {
+                "property": "host-name",
+                "dataType": "string",
+                "display": "iconAndText"
+            },
+            {
+                "property": "state",
+                "dataType": "string",
+                "display": "iconAndToolTip"
+            },
+            {
+                "property": "system-ip",
+                "dataType": "ipv4"
+            },
+            {
+                "property": "reachability",
+                "dataType": "string",
+                "display": "multiColumns"
+            },
+            {
+                "property": "site-id",
+                "dataType": "numberStr"
+            },
+            {
+                "property": "device-model",
+                "dataType": "deviceModel",
+                "display": "multiColumns"
+            },
+            {
+                "property": "bfdSessions",
+                "dataType": "numberStr"
+            },
+            {
+                "property": "controlConnections",
+                "dataType": "numberStr"
+            },
+            {
+                "property": "version",
+                "dataType": "string"
+            },
+            {
+                "property": "number-vsmart-peers",
+                "dataType": "number"
+            },
+            {
+                "property": "uptime-date",
+                "dataType": "date"
+            },
+            {
+                "property": "uuid",
+                "dataType": "string"
+            },
+            {
+                "property": "board-serial",
+                "dataType": "string"
+            },
+            {
+                "property": "device-groups",
+                "dataType": "array"
+            },
+            {
+                "property": "connectedVManages",
+                "dataType": "array"
+            },
+            {
+                "property": "lastupdated",
+                "dataType": "date"
+            }
+        ]
+    },
+    "data": [
+        {
+            "deviceId": "1.1.1.1",
+            "system-ip": "1.1.1.1",
+            "host-name": "vmanage",
+            "reachability": "reachable",
+            "status": "normal",
+            "personality": "vmanage",
+            "device-type": "vmanage",
+            "timezone": "UTC",
+            "device-groups": [
+                "\"No groups\""
+            ],
+            "lastupdated": 1675068094694,
+            "domain-id": "0",
+            "board-serial": "No certificate installed",
+            "certificate-validity": "Not Applicable",
+            "max-controllers": "0",
+            "uuid": "9ff08b37-b487-4376-928d-e12f24203c9f",
+            "controlConnections": "0",
+            "device-model": "vmanage",
+            "version": "19.2.3",
+            "connectedVManages": [
+                "\"1.1.1.1\""
+            ],
+            "site-id": "1000",
+            "latitude": "37.666684",
+            "longitude": "-122.777023",
+            "isDeviceGeoData": false,
+            "platform": "x86_64",
+            "uptime-date": 1675060680000,
+            "statusOrder": 4,
+            "device-os": "next",
+            "validity": "valid",
+            "state": "green",
+            "state_description": "All daemons up",
+            "model_sku": "None",
+            "local-system-ip": "1.1.1.1",
+            "total_cpu_count": "24",
+            "testbed_mode": false,
+            "layoutLevel": 1
         }
-      }
-
-      $('#input_apiKey').change(function() {
-        addApiKeyAuthorization();
-      });
-
-      // if you have an apiKey you would like to pre-populate on the page for demonstration purposes...
-      /*
-        var apiKey = "myApiKeyXXXX123456789";
-        $('#input_apiKey').val(apiKey);
-        addApiKeyAuthorization();
-      */
-
-      window.swaggerUi.load();
-  });
-	</script>
-</head>
-
-<body class="swagger-section">
-	<div id='header'>
-		<div class="swagger-ui-wrap">
-
-			<a id="logo" href="http://viptela.com/"></a>
-			<form id='api_selector'>
-				<div class='input'>
-					<input placeholder="/restdocs" id="input_baseUrl" name="baseUrl" type="text" hidden="true"/></div>
-					<div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
-						<div class='input'><a id="explore" href="#">Explore</a></div>
-			</form>
-		</div>
-	</div>
-
-	<div id="message-bar" class="swagger-ui-wrap">&nbsp;</div>
-	<div id="swagger-ui-container" class="swagger-ui-wrap"></div>
-</body>
-
-</html>
+    ]
+}
